@@ -1,7 +1,10 @@
-﻿using FileStorageDAL.Entity;
+﻿using FileStorageDAL.Data;
+using FileStorageDAL.Entity;
 using FileStorageDAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,44 +12,73 @@ namespace FileStorageDAL.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task AddAsync(User entity)
+        private FileStorageDbContext _context;
+
+        public UserRepository(FileStorageDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public void Delete(User entity)
+        public async Task AddAsync(User entity)
         {
-            throw new NotImplementedException();
+            _context.Users.Add(entity);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async void Delete(User entity)
+        {
+            _context.Users.Remove(entity);
+
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            if (_context.Users.Where(r => r.Id == id).ToList().Count() > 0)
+            {
+                var deleteItem = _context.Users.Where(r => r.Id == id).ToList()[0];
+                Delete(deleteItem);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
         }
 
         public Task<IEnumerable<User>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<User> resIEnum = _context.Users;
+            return Task.FromResult(resIEnum);
         }
 
         public Task<IEnumerable<User>> GetAllWithDetailsAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<User> resIEnum = _context.Users.Include("UserRole").Include("Files").ToList();
+            return Task.FromResult(resIEnum);
         }
 
         public Task<User> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            User user = new User();
+            if (_context.Users.Where(r => r.Id == id).ToList().Count > 0)
+            {
+                user = _context.Users.Where(r => r.Id == id).ToList()[0];
+            }
+            return Task.FromResult(user);
         }
 
         public Task<User> GetByIdWithDetailsAsync(int id)
         {
-            throw new NotImplementedException();
+            User user = new User();
+            if (_context.Users.Where(r => r.Id == id).ToList().Count > 0)
+            {
+                user = _context.Users.Include("UserRole").Include("Files").Where(r => r.Id == id).ToList()[0];
+            }
+            return Task.FromResult(user);
         }
 
         public void Update(User entity)
         {
-            throw new NotImplementedException();
+            _context.Update(entity);
         }
     }
 }

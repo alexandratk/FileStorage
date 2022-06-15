@@ -1,7 +1,9 @@
-﻿using FileStorageDAL.Entity;
+﻿using FileStorageDAL.Data;
+using FileStorageDAL.Entity;
 using FileStorageDAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,34 +11,57 @@ namespace FileStorageDAL.Repositories
 {
     public class UserRoleRepository : IUserRoleRepository
     {
-        public Task AddAsync(UserRole entity)
+        private FileStorageDbContext _context;
+
+        public UserRoleRepository(FileStorageDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public void Delete(UserRole entity)
+        public async Task AddAsync(UserRole entity)
         {
-            throw new NotImplementedException();
+            _context.UserRoles.Add(entity);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async void Delete(UserRole entity)
+        {
+            _context.UserRoles.Remove(entity);
+
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            if (_context.UserRoles.Where(r => r.Id == id).ToList().Count() > 0)
+            {
+                var deleteItem = _context.UserRoles.Where(r => r.Id == id).ToList()[0];
+                Delete(deleteItem);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
         }
 
         public Task<IEnumerable<UserRole>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<UserRole> resIEnum = _context.UserRoles;
+            return Task.FromResult(resIEnum);
         }
 
         public Task<UserRole> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            UserRole userRole = new UserRole();
+            if (_context.UserRoles.Where(r => r.Id == id).ToList().Count > 0)
+            {
+                userRole = _context.UserRoles.Where(r => r.Id == id).ToList()[0];
+            }
+            return Task.FromResult(userRole);
         }
 
         public void Update(UserRole entity)
         {
-            throw new NotImplementedException();
+            _context.Update(entity);
         }
     }
 }
