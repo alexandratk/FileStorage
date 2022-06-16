@@ -12,7 +12,7 @@ namespace FileStorageDAL.Entity
         public string Extension { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-
+        public bool IsPublic { get; set; }
         public byte[] Data { get; set; }
 
         public Folder Folder { get; set; }

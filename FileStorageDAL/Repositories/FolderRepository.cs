@@ -52,7 +52,8 @@ namespace FileStorageDAL.Repositories
 
         public Task<IEnumerable<Folder>> GetAllWithDetailsAsync()
         {
-            IEnumerable<Folder> resIEnum = _context.Folders.Include("FolderParent").Include("Files").ToList();
+            IEnumerable<Folder> resIEnum = _context.Folders.Include("User")
+                .Include("FolderParent").Include("Files").ToList();
             return Task.FromResult(resIEnum);
         }
 
@@ -71,7 +72,7 @@ namespace FileStorageDAL.Repositories
             Folder folder = new Folder();
             if (_context.Folders.Where(r => r.Id == id).ToList().Count > 0)
             {
-                folder = _context.Folders.Where(r => r.Id == id).Include("FolderParent")
+                folder = _context.Folders.Where(r => r.Id == id).Include("User").Include("FolderParent")
                     .Include("Files").ToList()[0];
             }
             return Task.FromResult(folder);

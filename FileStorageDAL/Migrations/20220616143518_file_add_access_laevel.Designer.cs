@@ -4,14 +4,16 @@ using FileStorageDAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FileStorageDAL.Migrations
 {
     [DbContext(typeof(FileStorageDbContext))]
-    partial class FileStorageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220616143518_file_add_access_laevel")]
+    partial class file_add_access_laevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +27,9 @@ namespace FileStorageDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccessLevel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Data")
                         .HasColumnType("varbinary(max)");
@@ -40,9 +45,6 @@ namespace FileStorageDAL.Migrations
 
                     b.Property<int>("FolderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");

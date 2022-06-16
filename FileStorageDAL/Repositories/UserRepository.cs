@@ -71,7 +71,7 @@ namespace FileStorageDAL.Repositories
             User user = new User();
             if (_context.Users.Where(r => r.Id == id).ToList().Count > 0)
             {
-                user = _context.Users.Include("UserRole").Include("Files").Where(r => r.Id == id).ToList()[0];
+                user = _context.Users.Include("UserRole").Include("Folders").Where(r => r.Id == id).ToList()[0];
             }
             return Task.FromResult(user);
         }

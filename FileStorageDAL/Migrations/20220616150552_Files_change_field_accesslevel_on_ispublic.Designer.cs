@@ -4,14 +4,16 @@ using FileStorageDAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FileStorageDAL.Migrations
 {
     [DbContext(typeof(FileStorageDbContext))]
-    partial class FileStorageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220616150552_Files_change_field_accesslevel_on_ispublic")]
+    partial class Files_change_field_accesslevel_on_ispublic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
