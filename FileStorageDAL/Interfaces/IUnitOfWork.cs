@@ -9,7 +9,7 @@ namespace FileStorageDAL.Interfaces
     {
         IFileRepository FileRepository { get; }
 
-        IFileCategoryRepository FileCategoryRepository { get; }
+        public IFolderRepository FolderRepository { get; }
 
         IUserRepository UserRepository { get; }
 

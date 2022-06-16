@@ -10,7 +10,7 @@ namespace FileStorageDAL.Data
     {
         public IFileRepository FileRepository { get; set; }
 
-        public IFileCategoryRepository FileCategoryRepository { get; set; }
+        public IFolderRepository FolderRepository { get; set; }
 
         public IUserRepository UserRepository { get; set; }
 

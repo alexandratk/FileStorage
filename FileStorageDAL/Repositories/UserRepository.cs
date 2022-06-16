@@ -52,7 +52,7 @@ namespace FileStorageDAL.Repositories
 
         public Task<IEnumerable<User>> GetAllWithDetailsAsync()
         {
-            IEnumerable<User> resIEnum = _context.Users.Include("UserRole").Include("Files").ToList();
+            IEnumerable<User> resIEnum = _context.Users.Include("UserRole").Include("Folders").ToList();
             return Task.FromResult(resIEnum);
         }
 

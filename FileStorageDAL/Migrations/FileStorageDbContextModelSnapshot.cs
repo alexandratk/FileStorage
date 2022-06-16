@@ -35,40 +35,45 @@ namespace FileStorageDAL.Migrations
                     b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FileCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("FileCategoryId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("FolderId");
 
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("FileStorageDAL.Entity.FileCategory", b =>
+            modelBuilder.Entity("FileStorageDAL.Entity.Folder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CategoryName")
+                    b.Property<string>("FolderName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FolderParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileCategories");
+                    b.HasIndex("FolderParentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Folders");
                 });
 
             modelBuilder.Entity("FileStorageDAL.Entity.User", b =>
@@ -120,23 +125,36 @@ namespace FileStorageDAL.Migrations
 
             modelBuilder.Entity("FileStorageDAL.Entity.File", b =>
                 {
-                    b.HasOne("FileStorageDAL.Entity.FileCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("FileCategoryId")
+                    b.HasOne("FileStorageDAL.Entity.Folder", "Folder")
+                        .WithMany("Files")
+                        .HasForeignKey("FolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FileStorageDAL.Entity.User", null)
-                        .WithMany("Files")
-                        .HasForeignKey("UserId");
+                    b.Navigation("Folder");
+                });
 
-                    b.Navigation("Category");
+            modelBuilder.Entity("FileStorageDAL.Entity.Folder", b =>
+                {
+                    b.HasOne("FileStorageDAL.Entity.Folder", "FolderParent")
+                        .WithMany()
+                        .HasForeignKey("FolderParentId");
+
+                    b.HasOne("FileStorageDAL.Entity.User", "User")
+                        .WithMany("Folders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FolderParent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FileStorageDAL.Entity.User", b =>
                 {
                     b.HasOne("FileStorageDAL.Entity.UserRole", "UserRole")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -144,9 +162,19 @@ namespace FileStorageDAL.Migrations
                     b.Navigation("UserRole");
                 });
 
-            modelBuilder.Entity("FileStorageDAL.Entity.User", b =>
+            modelBuilder.Entity("FileStorageDAL.Entity.Folder", b =>
                 {
                     b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("FileStorageDAL.Entity.User", b =>
+                {
+                    b.Navigation("Folders");
+                });
+
+            modelBuilder.Entity("FileStorageDAL.Entity.UserRole", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
